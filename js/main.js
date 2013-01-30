@@ -71,7 +71,7 @@
       this.dangler = Game.Dangler.create();
       this.containerEl.appendChild(this.dangler.el);
 
-      setInterval(this.onUpdate, 50);
+      setInterval(this.onUpdate, 30);
     },
 
     // Main Game Loop
