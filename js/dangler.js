@@ -14,16 +14,16 @@ var Game = Game || {};
 
     x: 0,
     velocity: 20,
+    delay: 0,
 
-    // This is the max rope length
     MIN_ROPE_HEIGHT: 100,
     MAX_ROPE_HEIGHT: 300,
 
     init: function() {
       var ropeEl = this.el.getElementsByClassName('rope')[0],
-          ropeLength = Math.floor( Math.random() * this.MAX_ROPE_HEIGHT ) + this.MIN_ROPE_HEIGHT;
+          ropeLength = Math.random() * this.MAX_ROPE_HEIGHT | 0 + this.MIN_ROPE_HEIGHT;
       ropeEl.style.height = ropeLength + 'px';
-      this.x = 0;
+      this.x = -50;
     },
 
     update: function() {

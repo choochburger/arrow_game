@@ -2,6 +2,14 @@ body {
   background: gray;
 }
 
+#start-btn {
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+  margin: 200px auto;
+  font-size: 24px;
+}
+
 #game {
   background: white;
   border-radius: 8px;
