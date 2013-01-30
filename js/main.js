@@ -71,13 +71,14 @@
       this.dangler = Game.Dangler.create();
       this.containerEl.appendChild(this.dangler.el);
 
-      setInterval(this.onUpdate, 30);
+      this.onUpdate();
     },
 
     // Main Game Loop
     onUpdate: function() {
       this.checkKeys();
       this.updateDanglers();
+      requestAnimationFrame(this.onUpdate);
     },
 
     checkKeys: function() {
