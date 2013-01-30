@@ -1,3 +1,19 @@
+body {
+  background: gray;
+}
+
+#game {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.2);
+  display: block;
+  height: 600px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  width: 800px;
+}
+
 .bow {
   background: brown;
   border-radius: 64px 64px 0 0;
@@ -16,4 +32,22 @@
   position: absolute;
   width: 80px;
   z-index: 1;
+}
+
+.dangler {
+  position: absolute;
+}
+
+.dangler .rope {
+  border: 2px dashed tan;
+  width: 1px;
+}
+
+.dangler .bubble {
+  border-radius: 80px;
+  background: red;
+  height: 60px;
+  left: -30px;
+  position: absolute;
+  width: 60px;
 }

@@ -7,6 +7,8 @@
 
       this.appendEls('game', [bow, bucket]);
       this.bindKeys(bow, bucket);
+
+      this.startLoop('game');
     },
 
     appendEls: function(containerId, children) {
@@ -35,6 +37,25 @@
             break;
         }
       });
+    },
+
+    MAX_DANGLERS: 20,
+    danglers: [],
+
+    startLoop: function(containerId) {
+      var containerEl = document.getElementById('game'),
+          containerWidth = parseInt(containerEl.offsetWidth) + 50,
+          dangler = Game.Dangler.create();
+
+      containerEl.appendChild(dangler.el);
+
+      setInterval(function() {
+        var danglerLeft = parseInt(dangler.el.style.left);
+        dangler.update();
+        if (danglerLeft > containerWidth) {
+          dangler.reset();
+        }
+      }, 50);
     }
   };
 
