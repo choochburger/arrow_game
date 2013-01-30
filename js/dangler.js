@@ -13,26 +13,37 @@ var Game = Game || {};
     },
 
     x: 0,
-    velocity: 20,
+    velocity: 10,
     delay: 0,
-
-    MIN_ROPE_HEIGHT: 100,
-    MAX_ROPE_HEIGHT: 300,
+    points: 0,
 
     init: function() {
-      var ropeEl = this.el.getElementsByClassName('rope')[0],
-          ropeLength = Math.random() * this.MAX_ROPE_HEIGHT | 0 + this.MIN_ROPE_HEIGHT;
-      ropeEl.style.height = ropeLength + 'px';
       this.x = -50;
+      this.createRope();
+      this.createPoints();
     },
 
     update: function() {
       this.x += this.velocity;
       this.el.style.left = this.x + 'px';
+    },
 
-      // check for out of bounds and then release
+    MIN_ROPE_HEIGHT: 100,
+    MAX_ROPE_HEIGHT: 300,
 
-      // make sure to have a pool of danglers
+    createRope: function() {
+      var ropeEl = this.el.getElementsByClassName('rope')[0],
+          ropeLength = Math.random() * this.MAX_ROPE_HEIGHT | 0;
+      if (ropeLength < this.MIN_ROPE_HEIGHT) ropeLength === this.MIN_ROPE_HEIGHT;
+      ropeEl.style.height = ropeLength + 'px';
+    },
+
+    MAX_POINTS: 20,
+
+    createPoints: function() {
+      var bubbleEl = this.el.getElementsByClassName('bubble')[0],
+          score = Math.ceil( Math.random() * this.MAX_POINTS );
+      bubbleEl.innerHTML = score;
     },
 
     reset: function() {
