@@ -4,10 +4,11 @@
     init: function() {
       this.bow = Game.Bow.create();
       this.bucket = Game.Bucket.create();
+      this.containerEl = document.getElementById('game');
 
       _.bindAll(this);
 
-      this.appendEls('game', [this.bow, this.bucket]);
+      this.appendEls([this.bow.el, this.bucket.el]);
       this.bindKeys();
 
       document.getElementById('start-btn')
@@ -16,12 +17,10 @@
 
     containerEl: null,
 
-    appendEls: function(containerId, children) {
-      this.containerEl = document.getElementById(containerId);
-
-      for (var i = 0, len = children.length; i < len; i++) {
-        var child = children[i];
-        this.containerEl.appendChild(child.el);
+    appendEls: function(els) {
+      for (var i = 0, len = els.length; i < len; i++) {
+        var el = els[i];
+        this.containerEl.appendChild(el);
       }
     },
 
@@ -34,25 +33,33 @@
     },
 
     bindKeys: function() {
-      var keyStatuses = this.keyStatuses;
+      document.addEventListener('keydown', this.onKeydown);
+      document.addEventListener('keyup',   this.onKeyup);
+    },
 
-      document.addEventListener('keydown', function(e) {
-        switch(e.keyCode) {
-          case 37: keyStatuses.bowLeft     = true; break;
-          case 39: keyStatuses.bowRight    = true; break;
-          case 65: keyStatuses.bucketLeft  = true; break;
-          case 68: keyStatuses.bucketRight = true; break;
-        }
-      });
+    onKeydown: function(e) {
+      switch(e.keyCode) {
+        // Bow
+        case 38: this.fireArrow(); break;
+        case 37: this.keyStatuses.bowLeft  = true; break;
+        case 39: this.keyStatuses.bowRight = true; break;
+        // Bucket
+        case 65: this.keyStatuses.bucketLeft  = true; break;
+        case 68: this.keyStatuses.bucketRight = true; break;
+        // Debug
+        case 32: this.togglePaused(); break;
+      }
+    },
 
-      document.addEventListener('keyup', function(e) {
-        switch(e.keyCode) {
-          case 37: keyStatuses.bowLeft     = false; break;
-          case 39: keyStatuses.bowRight    = false; break;
-          case 65: keyStatuses.bucketLeft  = false; break;
-          case 68: keyStatuses.bucketRight = false; break;
-        }
-      });
+    onKeyup: function(e) {
+      switch(e.keyCode) {
+        // Bow
+        case 37: this.keyStatuses.bowLeft  = false; break;
+        case 39: this.keyStatuses.bowRight = false; break;
+        // Bucket
+        case 65: this.keyStatuses.bucketLeft  = false; break;
+        case 68: this.keyStatuses.bucketRight = false; break;
+      }
     },
 
     MAX_DANGLERS: 20,
@@ -71,14 +78,29 @@
       this.dangler = Game.Dangler.create();
       this.containerEl.appendChild(this.dangler.el);
 
+      this.paused = false;
       this.onUpdate();
+    },
+
+    paused: false,
+
+    togglePaused: function() {
+      if (!this.paused) {
+        this.paused = true;
+      } else {
+        this.paused = false;
+        this.onUpdate();
+      }
     },
 
     // Main Game Loop
     onUpdate: function() {
       this.checkKeys();
       this.updateDanglers();
-      requestAnimationFrame(this.onUpdate);
+      this.updateArrows();
+      if (!this.paused) {
+        requestAnimationFrame(this.onUpdate);
+      }
     },
 
     checkKeys: function() {
@@ -89,9 +111,28 @@
     },
 
     updateDanglers: function() {
-        var danglerLeft = parseInt(this.dangler.el.style.left);
-        this.dangler.update();
-        if (danglerLeft > this.containerWidth) this.dangler.reset();
+      var danglerLeft = parseInt(this.dangler.el.style.left);
+      this.dangler.update();
+      if (danglerLeft > this.containerWidth) this.dangler.reset();
+    },
+
+    MAX_ARROWS: 4,
+    arrows: [],
+    fireArrow: function() {
+      var arrow;
+      if (this.arrows.length === this.MAX_ARROWS) return;
+      arrow = Game.Arrow.create();
+      arrow.setX(this.bow.getCenterX());
+      this.appendEls([arrow.el]);
+      this.arrows.push(arrow);
+    },
+
+    updateArrows: function() {
+      var arrows = this.arrows;
+      for (var i = 0, len = arrows.length; i < len; i++) {
+        var arrow = arrows[i];
+        arrow.update();
+      }
     }
   };
 
