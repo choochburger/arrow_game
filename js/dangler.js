@@ -7,7 +7,7 @@ var Game = Game || {};
       var dangler = Object.create(this);
       dangler.el = document.createElement('div');
       dangler.el.className = 'dangler';
-      dangler.el.innerHTML = '<div class="rope"></div><div class="bubble"></div>';
+      dangler.el.innerHTML = this.createInnerHtml();
       dangler.init();
       return dangler;
     },
@@ -21,6 +21,14 @@ var Game = Game || {};
       this.x = -50;
       this.createRope();
       this.createPoints();
+    },
+
+    createInnerHtml: function() {
+      var html  = '<div class="rope"></div>';
+          html += '<div class="bubble">';
+          html += '  <div class="points"></div>';
+          html += '</div>';
+      return html;
     },
 
     update: function() {
@@ -41,7 +49,7 @@ var Game = Game || {};
     MAX_POINTS: 20,
 
     createPoints: function() {
-      var bubbleEl = this.el.getElementsByClassName('bubble')[0],
+      var bubbleEl = this.el.getElementsByClassName('points')[0],
           score = Math.ceil( Math.random() * this.MAX_POINTS );
       bubbleEl.innerHTML = score;
     },
