@@ -21,6 +21,7 @@ var Game = Game || {};
       this.x = -50;
       this.createRope();
       this.createPoints();
+      this.hitEl = this.el.getElementsByClassName('bubble')[0];
     },
 
     createInnerHtml: function() {
@@ -56,7 +57,25 @@ var Game = Game || {};
 
     reset: function() {
       this.init();
+    },
+
+    getBoundingBox: function() {
+      var height = this.el.clientHeight + this.hitEl.clientHeight,
+          width  = 50;
+
+      return {
+        // using bitwise | for rounding - fastest across most browsers
+        topLeft: {
+          x: this.x - width | 0,
+          y: (height - this.hitEl.clientHeight) | 0
+        },
+        bottomRight: {
+          x: (this.x + this.el.clientWidth + width)  | 0,
+          y: height
+        }
+      }
     }
+
   };
 
   Game.Dangler = Dangler;

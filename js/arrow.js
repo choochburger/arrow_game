@@ -32,6 +32,24 @@ var Game = Game || {};
 
     reset: function() {
       this.setY(this.START_Y);
+    },
+
+    getBoundingBox: function() {
+      var height  = this.el.clientHeight,
+          // Don't allow the entire arrow to pass for a hit. Just the tip, baby.
+          yOffset = 160;
+
+      return {
+        // using bitwise | for rounding - fastest across most browsers
+        topLeft: {
+          x: this.x | 0,
+          y: 600 - height - this.y | 0
+        },
+        bottomRight: {
+          x: (this.x + this.el.clientWidth)  | 0,
+          y: 600 - this.y - yOffset
+        }
+      }
     }
   };
 

@@ -76,6 +76,7 @@
 
       this.containerWidth = parseInt(containerEl.offsetWidth) + 50,
       this.dangler = Game.Dangler.create();
+      this.danglers.push(this.dangler);
       this.containerEl.appendChild(this.dangler.el);
 
       this.paused = false;
@@ -98,6 +99,7 @@
       this.checkKeys();
       this.updateDanglers();
       this.updateArrows();
+      this.checkForHits();
       if (!this.paused) {
         requestAnimationFrame(this.onUpdate);
       }
@@ -133,7 +135,45 @@
         var arrow = arrows[i];
         arrow.update();
       }
+    },
+
+    checkForHits: function() {
+      var a, d, arrow, dangler,
+          numArrows   = this.arrows.length,
+          numDanglers = this.danglers.length,
+          isHit = false;
+
+      for (a = 0; a < numArrows; a++) {
+        arrow = this.arrows[a];
+        for (d = 0; d < numDanglers; d++) {
+          dangler = this.danglers[d];
+          isHit = this.hitTest(arrow, dangler);
+          if (isHit) {
+            var arrowIndex = this.arrows.indexOf(arrow);
+            this.arrows.splice(arrowIndex, 1);
+          }
+        }
+      }
+    },
+
+    // test to see if two els are colliding
+    hitTest: function(a, b) {
+      var rectA = a.getBoundingBox(),
+          rectB = b.getBoundingBox();
+
+      // if any of these conditions are satisfied, we
+      // can't have a collision
+      if (rectA.topLeft.x     >= rectB.bottomRight.x ||
+          rectA.bottomRight.x <= rectB.topLeft.x     ||
+          rectA.topLeft.y     >= rectB.bottomRight.y ||
+          rectA.bottomRight.y <= rectB.topLeft.y)
+        return false;
+
+      // if none of the conditions above are
+      // satisfied, we have a hit!
+      return true;
     }
+
   };
 
 })(window);
