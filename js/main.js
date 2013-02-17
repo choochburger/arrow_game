@@ -147,17 +147,14 @@
         arrow = this.arrows[a];
         for (d = 0; d < numDanglers; d++) {
           dangler = this.danglers[d];
-          isHit = this.hitTest(arrow, dangler);
-          if (isHit) {
-            var arrowIndex = this.arrows.indexOf(arrow);
-            this.arrows.splice(arrowIndex, 1);
-          }
+          isHit = this.testHit(arrow, dangler);
+          if (isHit) this.handleHit(arrow, dangler);
         }
       }
     },
 
     // test to see if two els are colliding
-    hitTest: function(a, b) {
+    testHit: function(a, b) {
       var rectA = a.getBoundingBox(),
           rectB = b.getBoundingBox();
 
@@ -172,6 +169,18 @@
       // if none of the conditions above are
       // satisfied, we have a hit!
       return true;
+    },
+
+    handleHit: function(arrow, dangler) {
+      this.destroyArrow(arrow);
+      dangler.drop();
+    },
+
+    destroyArrow: function(arrow) {
+      var arrowIndex = this.arrows.indexOf(arrow);
+      this.arrows.splice(arrowIndex, 1);
+      this.containerEl.removeChild(arrow.el);
+      delete arrow;
     }
 
   };

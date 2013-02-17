@@ -13,9 +13,12 @@ var Game = Game || {};
     },
 
     x: 0,
-    velocity: 10,
+    y: 0,
+    velocityX: 10,
+    velocityY: 0,
     delay: 0,
     points: 0,
+    isDropping: false,
 
     init: function() {
       this.x = -50;
@@ -33,8 +36,13 @@ var Game = Game || {};
     },
 
     update: function() {
-      this.x += this.velocity;
+      this.x += this.velocityX;
+      this.y += this.velocityY;
       this.el.style.left = this.x + 'px';
+      this.el.style.top  = this.y + 'px';
+
+      // Taper off velocityX when item is dropping
+      if (this.isDropping && this.velocityX > 0) this.velocityX -= 1;
     },
 
     MIN_ROPE_HEIGHT: 100,
@@ -74,6 +82,14 @@ var Game = Game || {};
           y: height
         }
       }
+    },
+
+    drop: function() {
+      var rope = this.el.getElementsByClassName('rope')[0];
+      rope.style.visibility = 'hidden';
+
+      this.isDropping = true;
+      this.velocityY = 10;
     }
 
   };
